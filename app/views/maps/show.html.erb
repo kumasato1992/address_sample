@@ -1,0 +1,47 @@
+<div id=map></div>
+<p id="notice"><%= notice %></p>
+<p>
+  <strong>Address:</strong>
+  <%= @map.address %>
+</p>
+<p>
+  <strong>Latitude:</strong>
+  <%= @map.latitude %>
+</p>
+<p>
+  <strong>Longitude:</strong>
+  <%= @map.longitude %>
+</p>
+<%= link_to 'Edit', edit_map_path(@map) %> |
+<%= link_to 'Back', maps_path %>
+
+<script type="text/javascript">
+  function initMap() {
+
+    var test = {lat: <%= @map.latitude %>, lng: <%= @map.longitude %>};
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 15,
+      center: test
+    });
+    var transitLayer = new google.maps.TransitLayer();
+    transitLayer.setMap(map);
+
+    var contentString = '住所：<%= @map.address %>';
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+
+    var marker = new google.maps.Marker({
+      position:test,
+      map: map,
+      title: contentString
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCbVyr3cmdkQ3YPbWALgkj_hfCpg-7oZE4&callback=initMap">
+</script>
